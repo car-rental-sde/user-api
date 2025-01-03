@@ -1,13 +1,13 @@
 package it.unitn.userapi;
 
-import it.unitn.userapi.config.AppConfiguration;
+import it.unitn.userapi.config.AppConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 @SpringBootApplication
 @EnableConfigurationProperties({
-        AppConfiguration.class
+        AppConfig.class
 })
 public class UserApiApplication {
 

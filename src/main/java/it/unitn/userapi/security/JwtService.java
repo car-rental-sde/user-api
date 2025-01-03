@@ -4,7 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import it.unitn.userapi.config.AppConfiguration;
+import it.unitn.userapi.config.AppConfig;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +17,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class JwtService {
 
-    private final AppConfiguration appConfiguration;
+    private final AppConfig appConfig;
 
     public String generateToken(String username) {
         return generateToken(username, new HashMap<>());
@@ -28,7 +28,7 @@ public class JwtService {
                 .setClaims(extraClaims)
                 .setSubject(username)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + appConfiguration.getJwtExpireSeconds() * 1000))
+                .setExpiration(new Date(System.currentTimeMillis() + appConfig.getJwtExpireSeconds() * 1000))
                 .signWith(getSecretKey())
                 .compact();
     }
@@ -54,7 +54,7 @@ public class JwtService {
     }
 
     private SecretKey getSecretKey() {
-        byte[] secretKeyBytes = Decoders.BASE64.decode(appConfiguration.getSecretKey());
+        byte[] secretKeyBytes = Decoders.BASE64.decode(appConfig.getSecretKey());
         return Keys.hmacShaKeyFor(secretKeyBytes);
     }
 }

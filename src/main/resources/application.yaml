@@ -2,6 +2,9 @@ app:
   environment:
     secret-key: 698a05552cbe84fab8a1f79a458952c4c19f800daabd7edd7a7e8b3a6a1e6f57
     jwt-expire-seconds: 3600
+    car-rental-api-url: http://localhost:8060
+    car-rental-api-username: userapi
+    car-rental-api-password: userapi
 
 server:
   port: 8070
@@ -38,6 +41,11 @@ logging:
     org:
       springframework:
         security: info # info | debug
+      apache:
+        hc:
+          client5:
+            http:
+              wire: debug # debug | trace
 
 management:
   endpoints:
