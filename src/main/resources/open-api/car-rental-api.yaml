@@ -1,0 +1,1167 @@
+openapi: 3.0.3
+info:
+  title: car-rental-api
+  description: |-
+    SDE 2024 project
+  version: v1
+
+tags:
+  - name: Authentication
+  - name: Cars
+  - name: Reservations
+  - name: Users
+  - name: Internal
+
+paths:
+  /auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: Login
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthenticationRequestModel'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthenticationResponseModel'
+        '400':
+          description: Bad request
+
+  /auth/register:
+    post:
+      tags:
+        - Authentication
+      summary: Register
+      operationId: register
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequestModel'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthenticationResponseModel'
+        '400':
+          description: Bad request
+
+  /auth/refresh:
+    post:
+      tags:
+        - Authentication
+      summary: Refresh token
+      operationId: refresh
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request
+
+
+  /cars/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+
+    get:
+      tags:
+        - Cars
+      summary: Get car by id
+      operationId: getCar
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarModel'
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+
+    put:
+      tags:
+        - Cars
+      summary: Update car by id
+      operationId: updateCar
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CarRequestModel'
+
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarModel'
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+
+    delete:
+      tags:
+        - Cars
+      summary: Delete car by id
+      operationId: deleteCar
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+
+  /cars:
+    get:
+      tags:
+        - Cars
+      summary: Searching for cars with filters
+      operationId: searchCars
+      parameters:
+        - name: brand
+          in: query
+          required: false
+          schema:
+            type: string
+
+        - name: model
+          in: query
+          required: false
+          schema:
+            type: string
+
+        - name: carType
+          in: query
+          required: false
+          schema:
+            type: string
+            example: Sedan
+
+        - name: fuelType
+          in: query
+          required: false
+          schema:
+            type: string
+            example: Diesel
+
+        - name: isGearboxAutomatic
+          in: query
+          required: false
+          schema:
+            type: boolean
+
+        - name: seatsMin
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 0
+
+        - name: seatsMax
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 10
+
+        - name: yearMin
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 1950
+
+        - name: yearMax
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 2100
+
+        - name: dayPriceMin
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int64
+            default: 0
+
+        - name: dayPriceMax
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int64
+            default: 100000
+
+        - name: startDate
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+
+        - name: endDate
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+
+        - name: place
+          in: query
+          required: false
+          schema:
+            type: string
+            example: -77.0364,38.8951
+
+        - name: sortBy
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/CarsSortColumn'
+
+        - name: sortDirection
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/SortDirection'
+
+        - $ref: '#/components/parameters/PageNumber'
+
+        - $ref: '#/components/parameters/PageSize'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarsPaginationResponseModel'
+        '400':
+          description: Bad request
+
+    post:
+      tags:
+        - Cars
+      summary: Add new car
+      operationId: addCar
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CarRequestModel'
+
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarModel'
+        '400':
+          description: Bad request
+
+
+  /reservations/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+
+    get:
+      tags:
+        - Reservations
+      summary: Get reservation by id
+      operationId: getReservation
+
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReservationModel'
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+
+    put:
+      tags:
+        - Reservations
+      summary: Update reservation by id
+      operationId: updateReservation
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReservationRequestModel'
+
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReservationModel'
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+
+    delete:
+      tags:
+        - Reservations
+      summary: Delete reservation by id
+      operationId: deleteReservation
+
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+
+  /reservations:
+    get:
+      tags:
+        - Reservations
+      summary: Searching for reservations with filters
+      operationId: searchReservations
+      parameters:
+        - name: carId
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int64
+
+        - name: startDate
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+
+        - name: endDate
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+
+        - name: startPlace
+          in: query
+          required: false
+          schema:
+            type: string
+            example: "Warszawa Mokotów"
+
+        - name: endPlace
+          in: query
+          required: false
+          schema:
+            type: string
+            example: "Warszawa Bielany"
+
+        - name: sortBy
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/ReservationsSortColumn'
+
+        - name: sortDirection
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/SortDirection'
+
+        - $ref: '#/components/parameters/PageNumber'
+
+        - $ref: '#/components/parameters/PageSize'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReservationsPaginationResponseModel'
+        '400':
+          description: Bad request
+
+    post:
+      tags:
+        - Reservations
+      summary: Add new reservation
+      operationId: addReservation
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReservationRequestModel'
+
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReservationModel'
+        '400':
+          description: Bad request
+
+
+  /users/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+
+    get:
+      tags:
+        - Users
+      summary: Get user by id
+      operationId: getUser
+
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserModel'
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+
+    put:
+      tags:
+        - Users
+      summary: Update user by id
+      operationId: updateUser
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserModel'
+
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserModel'
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+
+    delete:
+      tags:
+        - Users
+      summary: Delete user by id
+      operationId: deleteUser
+
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+
+  /users:
+    get:
+      tags:
+        - Users
+      summary: Searching for users with filters
+      operationId: searchUser
+      parameters:
+        - name: firstName
+          in: query
+          required: false
+          schema:
+            type: string
+
+        - name: lastName
+          in: query
+          required: false
+          schema:
+            type: string
+
+        - name: userRole
+          in: query
+          required: false
+          schema:
+            type: string
+
+        - name: sortBy
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/UsersSortColumn'
+
+        - name: sortDirection
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/SortDirection'
+
+        - $ref: '#/components/parameters/PageNumber'
+
+        - $ref: '#/components/parameters/PageSize'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsersPaginationResponseModel'
+        '400':
+          description: Bad request
+
+    post:
+      tags:
+        - Users
+      summary: Add new user
+      operationId: addUser
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserModel'
+
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserModel'
+        '400':
+          description: Bad request
+
+
+  /internal/brands:
+    get:
+      tags:
+        - Internal
+      summary: Get all car brands
+      operationId: getBrands
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BrandModel'
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+
+  /internal/models:
+    get:
+      tags:
+        - Internal
+      summary: Get all car models
+      operationId: getModels
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CarModelModel'
+        '400':
+          description: Bad request
+    post:
+      tags:
+        - Internal
+      summary: Add new car model
+      operationId: addModel
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CarModelRequestModel'
+
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarModelModel'
+        '400':
+          description: Bad request
+
+  /internal/models/{brandId}:
+    parameters:
+      - name: brandId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+
+    get:
+      tags:
+        - Internal
+      summary: Get all car models of specific brand
+      operationId: getModelsByBrands
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CarModelModel'
+        '400':
+          description: Bad request
+
+  /internal/carTypes:
+    get:
+      tags:
+        - Internal
+      summary: Get all car types
+      operationId: getCarTypes
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CarTypeModel'
+        '400':
+          description: Bad request
+
+  /internal/fuelTypes:
+    get:
+      tags:
+        - Internal
+      summary: Get all fuel types
+      operationId: getFuelTypes
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FuelTypeModel'
+        '400':
+          description: Bad request
+
+  /internal/equipmentPieces:
+    get:
+      tags:
+        - Internal
+      summary: Get all equipment pieces
+      operationId: getEquipmentPieces
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EquipmentPieceModel'
+        '400':
+          description: Bad request
+
+components:
+  schemas:
+
+    RegisterRequestModel:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+        email:
+          type: string
+          format: email
+        name:
+          type: string
+        surname:
+          type: string
+        userRole:
+          $ref: '#/components/schemas/UserRoleModel'
+
+    AuthenticationResponseModel:
+      type: object
+      properties:
+        accessToken:
+          type: string
+        refreshToken:
+          type: string
+
+    AuthenticationRequestModel:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+
+    CarsPaginationResponseModel:
+      type: object
+      properties:
+        pageNumber:
+          type: integer
+        pageSize:
+          type: integer
+        totalRecords:
+          type: integer
+          format: int64
+        cars:
+          type: array
+          items:
+            $ref: '#/components/schemas/CarModel'
+
+    CarOverviewModel:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        model:
+          $ref: '#/components/schemas/CarModelModel'
+        dayPrice:
+          type: integer
+          format: int64
+        color:
+          type: string
+
+    CarModel:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        model:
+          $ref: '#/components/schemas/CarModelModel'
+        mileage:
+          type: integer
+          example: 350000
+        equipment:
+          type: array
+          items:
+            $ref: '#/components/schemas/EquipmentPieceModel'
+        dayPrice:
+          type: integer
+          format: int64
+        color:
+          type: string
+
+    CarRequestModel:
+      type: object
+      properties:
+        modelId:
+          type: integer
+          format: int64
+          example: 1
+        mileage:
+          type: integer
+          example: 350000
+        equipment:
+          type: array
+          items:
+            type: integer
+            format: int64
+        dayPrice:
+          type: integer
+          format: int64
+        color:
+          type: string
+
+    CarModelModel:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        brand:
+          $ref: '#/components/schemas/BrandModel'
+        name:
+          type: string
+          example: Mustang
+        variant:
+          type: string
+          nullable: true
+          example: Sport
+        productionYear:
+          type: integer
+          example: 2005
+        carType:
+          $ref: '#/components/schemas/CarTypeModel'
+        fuelType:
+          $ref: '#/components/schemas/FuelTypeModel'
+        isGearboxAutomatic:
+          type: boolean
+        numberOfDoors:
+          type: integer
+          example: 4
+        numberOfSeats:
+          type: integer
+          example: 5
+        trunkCapacity:
+          type: integer
+          example: 500
+        horsePower:
+          type: integer
+          example: 530
+        avgFuelConsumption:
+          type: number
+          format: float
+          example: 5.3
+
+    CarModelRequestModel:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        brandId:
+          type: integer
+          format: int64
+        name:
+          type: string
+          example: Mustang
+        variant:
+          type: string
+          nullable: true
+          example: Sport
+        productionYear:
+          type: integer
+          example: 2005
+        carTypeId:
+          type: integer
+          format: int64
+        fuelTypeId:
+          type: integer
+          format: int64
+        isGearboxAutomatic:
+          type: boolean
+        numberOfDoors:
+          type: integer
+          example: 4
+        numberOfSeats:
+          type: integer
+          example: 5
+        trunkCapacity:
+          type: integer
+          example: 500
+        horsePower:
+          type: integer
+          example: 530
+        avgFuelConsumption:
+          type: number
+          format: float
+          example: 5.3
+
+    BrandModel:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+          example: Ford
+        country:
+          type: string
+          example: USA
+        logoUrl:
+          type: string
+
+    CarTypeModel:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+          example: Coupe
+
+    FuelTypeModel:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+          example: Diesel
+
+    EquipmentPieceModel:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+          example: Air conditioning
+
+    ReservationsPaginationResponseModel:
+      type: object
+      properties:
+        pageNumber:
+          type: integer
+        pageSize:
+          type: integer
+        totalRecords:
+          type: integer
+          format: int64
+        reservations:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReservationModel'
+
+    ReservationModel:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        car:
+          $ref: '#/components/schemas/CarModel'
+        beginDate:
+          type: string
+          format: date
+        beginPlace:
+          type: string
+          example: Mokotow
+        beginPosition:
+          type: string
+          example: -77.0364,38.8951
+        endDate:
+          type: string
+          format: date
+        endPlace:
+          type: string
+          example: Mokotow
+        endPosition:
+          type: string
+          example: -77.0364,38.8951
+        isMaintenance:
+          type: boolean
+        details:
+          type: string
+          nullable: true
+        customer:
+          $ref: '#/components/schemas/CustomerModel'
+
+    ReservationRequestModel:
+      type: object
+      properties:
+        carId:
+          type: integer
+          format: int64
+        beginDate:
+          type: string
+          format: date
+        beginPlace:
+          type: string
+          example: Mokotow
+        beginPosition:
+          type: string
+          example: -77.0364,38.8951
+        endDate:
+          type: string
+          format: date
+        endPlace:
+          type: string
+          example: Mokotow
+        endPosition:
+          type: string
+          example: -77.0364,38.8951
+        isMaintenance:
+          type: boolean
+        details:
+          type: string
+          nullable: true
+        customer:
+          $ref: '#/components/schemas/CustomerRequestModel'
+
+    UsersPaginationResponseModel:
+      type: object
+      properties:
+        pageNumber:
+          type: integer
+        pageSize:
+          type: integer
+        totalRecords:
+          type: integer
+          format: int64
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserModel'
+
+    UserModel:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        username:
+          type: string
+          example: theUser
+        email:
+          type: string
+          format: email
+          example: email@email.email
+        name:
+          type: string
+          example: John
+        surname:
+          type: string
+          example: Doe
+        userRole:
+          $ref: '#/components/schemas/UserRoleModel'
+        isBlocked:
+          type: boolean
+
+    CustomerModel:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        booklyId:
+          type: integer
+        name:
+          type: string
+        surname:
+          type: string
+        isBlocked:
+          type: boolean
+
+    CustomerRequestModel:
+      type: object
+      properties:
+        booklyId:
+          type: integer
+          format: int64
+        name:
+          type: string
+        surname:
+          type: string
+
+    UserRoleModel:
+      type: string
+      enum:
+        - USER
+        - ADMIN
+        - API_CLIENT # TODO: Can I do it in smarter way? Like have a specific value in db for reservation made by external api? Google how to do it better
+
+    CarsSortColumn:
+      type: string
+      enum:
+        - ID
+        - BRAND
+        - MODEL
+        - CAR_TYPE
+        - IS_GEARBOX_AUTOMATIC
+        - FUEL_TYPE
+        - NUMBER_OF_SEATS
+        - PRODUCTION_YEAR
+        - BEGIN_PLACE
+      default: ID
+
+    ReservationsSortColumn:
+      type: string
+      enum:
+        - ID
+        - BRAND
+        - MODEL
+        - CAR_TYPE
+        - BEGIN_DATE
+        - BEGIN_PLACE
+        - END_DATE
+        - END_PLACE
+
+    UsersSortColumn:
+      type: string
+      enum:
+        - USERNAME
+        - NAME
+        - SURNAME
+        - USER_TYPE
+        - IS_BLOCKED
+
+    SortDirection:
+      type: string
+      enum:
+        - ASC
+        - DESC
+      default: ASC
+
+  parameters:
+    PageNumber:
+      name: page
+      in: query
+      required: false
+      schema:
+        type: integer
+        default: 1
+
+    PageSize:
+      name: size
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 50
+        multipleOf: 10 # matches 10, 20, ...
+        default: 20
+

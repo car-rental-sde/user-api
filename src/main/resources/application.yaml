@@ -1,0 +1,46 @@
+app:
+  environment:
+    secret-key: 698a05552cbe84fab8a1f79a458952c4c19f800daabd7edd7a7e8b3a6a1e6f57
+    jwt-expire-seconds: 3600
+
+server:
+  port: 8070
+
+spring:
+  application:
+    name: user-api
+  h2:
+    console:
+      enabled: true
+      settings.web-allow-others: true
+  datasource:
+    url: jdbc:h2:mem:users;DATABASE_TO_UPPER=false
+#    url: jdbc:h2:file:/data/demo # use this line to persist data
+    username: sa
+    password:
+    driverClassName: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    defer-datasource-initialization: true # create tables before populating them
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+  sql:
+    init:
+      mode: embedded # always | never | embedded
+
+logging:
+  level:
+    root: info
+    it:
+      unitn: trace
+    org:
+      springframework:
+        security: info # info | debug
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: mappings, beans, health
