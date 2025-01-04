@@ -354,6 +354,13 @@ paths:
       summary: Searching for reservations with filters
       operationId: searchReservations
       parameters:
+        - name: customerExternalId
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int64
+
         - name: carId
           in: query
           required: false

@@ -22,5 +22,5 @@ public interface ReservationService {
     Optional<ReservationEntity> addReservation(ReservationRequestModel putReservationDto);
     Optional<ReservationEntity> getReservation(Long id);
     void deleteReservation(Long id);
-    ReservationEntity updateReservation(Long id, ReservationRequestModel putReservationDto);
+    Optional<ReservationEntity> updateReservation(Long id, ReservationRequestModel putReservationDto);
 }

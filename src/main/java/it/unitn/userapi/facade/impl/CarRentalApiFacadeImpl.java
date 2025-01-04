@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -20,28 +22,30 @@ public class CarRentalApiFacadeImpl implements CarRentalApiFacade {
 
     // TODO: Make it simple
     @Override
-    public HttpClientErrorsAwareResponse<CarsPaginationResponseModel> searchCars(Long id) {
+    public HttpClientErrorsAwareResponse<CarsPaginationResponseModel> searchCars(String brand,
+                                                                                 String model,
+                                                                                 String carType,
+                                                                                 String fuelType,
+                                                                                 Boolean isGearboxAutomatic,
+                                                                                 Integer seatsMin,
+                                                                                 Integer seatsMax,
+                                                                                 Integer yearMin,
+                                                                                 Integer yearMax,
+                                                                                 Long dayPriceMin,
+                                                                                 Long dayPriceMax,
+                                                                                 LocalDate startDate,
+                                                                                 LocalDate endDate,
+                                                                                 String place,
+                                                                                 CarsSortColumn sortBy,
+                                                                                 SortDirection sortDirection,
+                                                                                 Integer page,
+                                                                                 Integer size) {
         HttpClientErrorsAwareResponse<CarsPaginationResponseModel> awareResponse =
                 new RestInvoker<CarsPaginationResponseModel>().invoke(() ->
                         carsApi.searchCarsWithHttpInfo(
-                                null,
-                                null,
-                                null,
-                                null,
-                                null,
-                                null,
-                                null,
-                                null,
-                                null,
-                                null,
-                                null,
-                                null,
-                                null,
-                                null,
-                                null,
-                                null,
-                                null,
-                                null
+                                brand, model, carType, fuelType, isGearboxAutomatic, seatsMin, seatsMax,
+                                yearMin, yearMax, dayPriceMin, dayPriceMax, startDate, endDate, place,
+                                sortBy, sortDirection, page, size
                         )
                 );
 
@@ -81,19 +85,22 @@ public class CarRentalApiFacadeImpl implements CarRentalApiFacade {
     }
 
     @Override
-    public HttpClientErrorsAwareResponse<ReservationsPaginationResponseModel> getReservationsByUserId(Long id) {
+    public HttpClientErrorsAwareResponse<ReservationsPaginationResponseModel> getReservationsByUserId(Long customerExternalId,
+                                                                                                      Long carId,
+                                                                                                      LocalDate startDate,
+                                                                                                      LocalDate endDate,
+                                                                                                      String startPlace,
+                                                                                                      String endPlace,
+                                                                                                      ReservationsSortColumn sortBy,
+                                                                                                      SortDirection sortDirection,
+                                                                                                      Integer page,
+                                                                                                      Integer size) {
         HttpClientErrorsAwareResponse<ReservationsPaginationResponseModel> awareResponse =
                 new RestInvoker<ReservationsPaginationResponseModel>().invoke(() ->
                         reservationsApi.searchReservationsWithHttpInfo(
                                 null,
-                                null,
-                                null,
-                                null,
-                                null,
-                                null,
-                                null,
-                                null,
-                                null
+                                carId, startDate, endDate, startPlace, endPlace,
+                                sortBy, sortDirection, page, size
                         )
                 );
 

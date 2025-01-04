@@ -20,8 +20,8 @@ public class TestController {
     @GetMapping("/test")
     public ResponseEntity<String> test() {
 
-        HttpClientErrorsAwareResponse<CarsPaginationResponseModel> car = carRentalApiFacade.searchCars(1L);
-        HttpClientErrorsAwareResponse<ReservationModel> reservation = carRentalApiFacade.getReservation(1L);
+//        HttpClientErrorsAwareResponse<CarsPaginationResponseModel> car = carRentalApiFacade.searchCars(1L);
+//        HttpClientErrorsAwareResponse<ReservationModel> reservation = carRentalApiFacade.getReservation(1L);
 
         return ResponseEntity.ok("Test");
     }

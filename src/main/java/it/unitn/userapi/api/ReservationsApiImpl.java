@@ -21,7 +21,6 @@ public class ReservationsApiImpl implements ReservationsApiDelegate {
 
     private final ReservationService reservationService;
     private final Mappers mappers;
-//    private final EntityToModelMappers mappers;
 
     @Override
     public ResponseEntity<ReservationsPaginationResponseModel> searchReservations(Long carId,
@@ -41,7 +40,7 @@ public class ReservationsApiImpl implements ReservationsApiDelegate {
         Page<ReservationEntity> reservations = reservationService.searchReservations(carId, startDate, endDate, startPlace, endPlace, sortBy, sortDirection, page, size);
 
         ReservationsPaginationResponseModel response = new ReservationsPaginationResponseModel();
-//        response.setReservations(reservations.stream().map(mappers::reservationToReservationModel).toList());
+        response.setReservations(reservations.stream().map(mappers::toReservationModel).toList());
         response.setPageNumber(reservations.getNumber() + 1);
         response.setPageSize(reservations.getSize());
         response.setTotalRecords(reservations.getTotalElements());
@@ -55,9 +54,8 @@ public class ReservationsApiImpl implements ReservationsApiDelegate {
 
         Optional<ReservationEntity> optionalReservation = reservationService.getReservation(id);
 
-//        return optionalReservation.map(reservation -> ResponseEntity.ok(mappers.reservationToReservationModel(reservation)))
-//                .orElseGet(() -> ResponseEntity.notFound().build());
-        return null;
+        return optionalReservation.map(reservation -> ResponseEntity.ok(mappers.toReservationModel(reservation)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @Override
@@ -83,7 +81,10 @@ public class ReservationsApiImpl implements ReservationsApiDelegate {
     public ResponseEntity<ReservationModel> updateReservation(Long id, ReservationRequestModel reservationRequest) {
         log.debug("Updating reservation with id: [{}], request: [{}]", id, reservationRequest);
 
-//        return ResponseEntity.ok(mappers.reservationToReservationModel(reservationService.updateReservation(id, reservationRequest)));
-        return null;
+        Optional<ReservationEntity> optionalReservation = reservationService.updateReservation(id, reservationRequest);
+
+        return optionalReservation.map(reservationEntity -> ResponseEntity.ok(mappers.toReservationModel(reservationEntity)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
+
     }
 }
