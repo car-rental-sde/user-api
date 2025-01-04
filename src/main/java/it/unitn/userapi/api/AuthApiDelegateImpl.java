@@ -3,7 +3,6 @@ package it.unitn.userapi.api;
 import it.unitn.userapi.openapi.api.AuthApiDelegate;
 import it.unitn.userapi.openapi.model.AuthenticationRequestModel;
 import it.unitn.userapi.openapi.model.AuthenticationResponseModel;
-import it.unitn.userapi.openapi.model.RegisterRequestModel;
 import it.unitn.userapi.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,12 +28,5 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
         log.debug("Trying to refresh token...");
 //        authenticationService.refreshToken(request, response);
         return ResponseEntity.ok().build();
-    }
-
-    @Override
-    public ResponseEntity<AuthenticationResponseModel> register(RegisterRequestModel registerRequestModel) {
-        log.debug("Trying to register user...");
-        log.trace("Registering user: [{}]", registerRequestModel);
-        return ResponseEntity.ok(authenticationService.register(registerRequestModel));
     }
 }
