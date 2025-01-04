@@ -34,27 +34,6 @@ paths:
         '400':
           description: Bad request
 
-  /auth/register:
-    post:
-      tags:
-        - Authentication
-      summary: Register
-      operationId: register
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RegisterRequestModel'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AuthenticationResponseModel'
-        '400':
-          description: Bad request
-
   /auth/refresh:
     post:
       tags:
@@ -451,6 +430,7 @@ paths:
         required: true
         schema:
           type: integer
+          format: int64
 
     get:
       tags:
@@ -509,55 +489,6 @@ paths:
           description: Not found
 
   /users:
-    get:
-      tags:
-        - Users
-      summary: Searching for users with filters
-      operationId: searchUser
-      parameters:
-        - name: firstName
-          in: query
-          required: false
-          schema:
-            type: string
-
-        - name: lastName
-          in: query
-          required: false
-          schema:
-            type: string
-
-        - name: userRole
-          in: query
-          required: false
-          schema:
-            type: string
-
-        - name: sortBy
-          in: query
-          required: false
-          schema:
-            $ref: '#/components/schemas/UsersSortColumn'
-
-        - name: sortDirection
-          in: query
-          required: false
-          schema:
-            $ref: '#/components/schemas/SortDirection'
-
-        - $ref: '#/components/parameters/PageNumber'
-
-        - $ref: '#/components/parameters/PageSize'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UsersPaginationResponseModel'
-        '400':
-          description: Bad request
-
     post:
       tags:
         - Users
@@ -722,24 +653,6 @@ paths:
 
 components:
   schemas:
-
-    RegisterRequestModel:
-      type: object
-      properties:
-        username:
-          type: string
-        password:
-          type: string
-        email:
-          type: string
-          format: email
-        name:
-          type: string
-        surname:
-          type: string
-        userRole:
-          $ref: '#/components/schemas/UserRoleModel'
-
     AuthenticationResponseModel:
       type: object
       properties:
@@ -1057,8 +970,6 @@ components:
           example: Doe
         userRole:
           $ref: '#/components/schemas/UserRoleModel'
-        isBlocked:
-          type: boolean
 
     NewUserModel:
       type: object
@@ -1066,6 +977,8 @@ components:
         username:
           type: string
           example: theUser
+        password:
+          type: string
         email:
           type: string
           format: email
@@ -1142,13 +1055,13 @@ components:
         - USERNAME
         - NAME
         - SURNAME
-        - USER_TYPE
+        - USER_ROLE
 
     CustomersSortColumn:
       type: string
       enum:
         - ID
-        - BOOKLY_ID
+        - EXTERNAL_API_ID
         - NAME
         - SURNAME
 
