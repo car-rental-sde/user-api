@@ -27,12 +27,12 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)) // Allow H2 Console in frame
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/**").permitAll()
-//                        .requestMatchers("/").permitAll()
-//                        .requestMatchers("/auth/**").permitAll()
-//                        .requestMatchers("/actuator/**").permitAll()
-//                        .requestMatchers("/h2-console/**").permitAll()
-//                        .requestMatchers("/**").hasRole("USER")
+//                        .requestMatchers("/**").permitAll()
+                        .requestMatchers("/").permitAll()
+                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/actuator/**").permitAll()
+                        .requestMatchers("/h2-console/**").permitAll()
+                        .requestMatchers("/**").hasRole("USER")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
