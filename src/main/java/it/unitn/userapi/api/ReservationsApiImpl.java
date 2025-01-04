@@ -37,10 +37,10 @@ public class ReservationsApiImpl implements ReservationsApiDelegate {
                         "endPlace: [{}], sortBy: [{}], sortDirection: [{}], page: [{}], size: [{}]",
                 carId, startDate, endDate, startPlace, endPlace, sortBy, sortDirection, page, size);
 
-        Page<ReservationEntity> reservations = reservationService.searchReservations(carId, startDate, endDate, startPlace, endPlace, sortBy, sortDirection, page, size);
+        Page<ReservationModel> reservations = reservationService.searchReservations(carId, startDate, endDate, startPlace, endPlace, sortBy, sortDirection, page, size);
 
         ReservationsPaginationResponseModel response = new ReservationsPaginationResponseModel();
-        response.setReservations(reservations.stream().map(mappers::toReservationModel).toList());
+        response.setReservations(reservations.getContent());
         response.setPageNumber(reservations.getNumber() + 1);
         response.setPageSize(reservations.getSize());
         response.setTotalRecords(reservations.getTotalElements());
@@ -52,9 +52,9 @@ public class ReservationsApiImpl implements ReservationsApiDelegate {
     public ResponseEntity<ReservationModel> getReservation(Long id) {
         log.debug("Getting reservation with id: [{}]", id);
 
-        Optional<ReservationEntity> optionalReservation = reservationService.getReservation(id);
+        Optional<ReservationModel> optionalReservation = reservationService.getReservation(id);
 
-        return optionalReservation.map(reservation -> ResponseEntity.ok(mappers.toReservationModel(reservation)))
+        return optionalReservation.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
@@ -64,8 +64,8 @@ public class ReservationsApiImpl implements ReservationsApiDelegate {
 
         // TODO: If null then return specific code
 
-        Optional<ReservationEntity> reservationOptional = reservationService.addReservation(reservationRequest);
-        return reservationOptional.map(reservationEntity -> ResponseEntity.ok(mappers.toReservationModel(reservationEntity)))
+        Optional<ReservationModel> reservationOptional = reservationService.addReservation(reservationRequest);
+        return reservationOptional.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
@@ -81,9 +81,9 @@ public class ReservationsApiImpl implements ReservationsApiDelegate {
     public ResponseEntity<ReservationModel> updateReservation(Long id, ReservationRequestModel reservationRequest) {
         log.debug("Updating reservation with id: [{}], request: [{}]", id, reservationRequest);
 
-        Optional<ReservationEntity> optionalReservation = reservationService.updateReservation(id, reservationRequest);
+        Optional<ReservationModel> optionalReservation = reservationService.updateReservation(id, reservationRequest);
 
-        return optionalReservation.map(reservationEntity -> ResponseEntity.ok(mappers.toReservationModel(reservationEntity)))
+        return optionalReservation.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
 
     }

@@ -1,6 +1,6 @@
 package it.unitn.userapi.service;
 
-import it.unitn.userapi.entity.ReservationEntity;
+import it.unitn.userapi.openapi.model.ReservationModel;
 import it.unitn.userapi.openapi.model.ReservationRequestModel;
 import it.unitn.userapi.openapi.model.ReservationsSortColumn;
 import it.unitn.userapi.openapi.model.SortDirection;
@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 public interface ReservationService {
-    Page<ReservationEntity> searchReservations(Long carId,
+    Page<ReservationModel> searchReservations(Long carId,
                                                LocalDate startDate,
                                                LocalDate endDate,
                                                String startPlace,
@@ -19,8 +19,8 @@ public interface ReservationService {
                                                SortDirection sortDirection,
                                                Integer page,
                                                Integer size);
-    Optional<ReservationEntity> addReservation(ReservationRequestModel putReservationDto);
-    Optional<ReservationEntity> getReservation(Long id);
+    Optional<ReservationModel> addReservation(ReservationRequestModel putReservationDto);
+    Optional<ReservationModel> getReservation(Long id);
     void deleteReservation(Long id);
-    Optional<ReservationEntity> updateReservation(Long id, ReservationRequestModel putReservationDto);
+    Optional<ReservationModel> updateReservation(Long id, ReservationRequestModel putReservationDto);
 }

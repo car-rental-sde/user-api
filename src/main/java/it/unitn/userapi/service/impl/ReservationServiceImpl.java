@@ -1,13 +1,12 @@
 package it.unitn.userapi.service.impl;
 
 import it.unitn.userapi.carrentalapi.model.CustomerRequestModel;
-import it.unitn.userapi.carrentalapi.model.ReservationModel;
 import it.unitn.userapi.carrentalapi.model.ReservationsPaginationResponseModel;
-import it.unitn.userapi.entity.ReservationEntity;
 import it.unitn.userapi.entity.UserEntity;
 import it.unitn.userapi.facade.CarRentalApiFacade;
 import it.unitn.userapi.facade.HttpClientErrorsAwareResponse;
 import it.unitn.userapi.mapper.Mappers;
+import it.unitn.userapi.openapi.model.ReservationModel;
 import it.unitn.userapi.openapi.model.ReservationRequestModel;
 import it.unitn.userapi.openapi.model.ReservationsSortColumn;
 import it.unitn.userapi.openapi.model.SortDirection;
@@ -38,7 +37,7 @@ public class ReservationServiceImpl implements ReservationService {
     private final CarRentalApiFacade carRentalApiFacade;
 
     @Override
-    public Page<ReservationEntity> searchReservations(Long carId,
+    public Page<ReservationModel> searchReservations(Long carId,
                                                       LocalDate startDate,
                                                       LocalDate endDate,
                                                       String startPlace,
@@ -76,8 +75,8 @@ public class ReservationServiceImpl implements ReservationService {
                 page, size);
 
         if (response.isSuccess()) {
-            List<ReservationEntity> reservations = response.getBody().getReservations().stream()
-                    .map(mappers::toReservationEntity)
+            List<ReservationModel> reservations = response.getBody().getReservations().stream()
+                    .map(mappers::toReservationModel)
                     .toList();
 
             // Return a Page object constructed with retrieved data
@@ -93,28 +92,30 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public Optional<ReservationEntity> addReservation(ReservationRequestModel reservationRequest) {
+    public Optional<ReservationModel> addReservation(ReservationRequestModel reservationRequest) {
 
         it.unitn.userapi.carrentalapi.model.ReservationRequestModel reservationRequestModel = mappers.toCarRentalApiReservationRequestModel(reservationRequest);
 
         String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         userRepository.findByUsername(username).ifPresent(user -> reservationRequestModel.setCustomer(toCustomerModel(user)));
 
-        HttpClientErrorsAwareResponse<ReservationModel> response = carRentalApiFacade.makeReservation(reservationRequestModel);
+        HttpClientErrorsAwareResponse<it.unitn.userapi.carrentalapi.model.ReservationModel> response =
+                carRentalApiFacade.makeReservation(reservationRequestModel);
 
         if (response.isSuccess()) {
-            return Optional.of(mappers.toReservationEntity(response.getBody()));
+            return Optional.of(mappers.toReservationModel(response.getBody()));
         }
 
         return Optional.empty();
     }
 
     @Override
-    public Optional<ReservationEntity> getReservation(Long id) {
-        HttpClientErrorsAwareResponse<ReservationModel> response = carRentalApiFacade.getReservation(id);
+    public Optional<ReservationModel> getReservation(Long id) {
+        HttpClientErrorsAwareResponse<it.unitn.userapi.carrentalapi.model.ReservationModel> response =
+                carRentalApiFacade.getReservation(id);
 
         if (response.isSuccess()) {
-            return Optional.of(mappers.toReservationEntity(response.getBody()));
+            return Optional.of(mappers.toReservationModel(response.getBody()));
         }
 
         return Optional.empty();
@@ -131,17 +132,18 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public Optional<ReservationEntity> updateReservation(Long id, ReservationRequestModel reservationRequest) {
+    public Optional<ReservationModel> updateReservation(Long id, ReservationRequestModel reservationRequest) {
 
         it.unitn.userapi.carrentalapi.model.ReservationRequestModel reservationRequestModel = mappers.toCarRentalApiReservationRequestModel(reservationRequest);
 
         String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         userRepository.findByUsername(username).ifPresent(user -> reservationRequestModel.setCustomer(toCustomerModel(user)));
 
-        HttpClientErrorsAwareResponse<ReservationModel> response = carRentalApiFacade.editReservation(id, reservationRequestModel);
+        HttpClientErrorsAwareResponse<it.unitn.userapi.carrentalapi.model.ReservationModel> response =
+                carRentalApiFacade.editReservation(id, reservationRequestModel);
 
         if (response.isSuccess()) {
-            return Optional.of(mappers.toReservationEntity(response.getBody()));
+            return Optional.of(mappers.toReservationModel(response.getBody()));
         }
 
         return Optional.empty();

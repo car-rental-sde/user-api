@@ -838,10 +838,6 @@ components:
         name:
           type: string
           example: Mustang
-        variant:
-          type: string
-          nullable: true
-          example: Sport
         productionYear:
           type: integer
           example: 2005
@@ -877,10 +873,6 @@ components:
         name:
           type: string
           example: Mustang
-        variant:
-          type: string
-          nullable: true
-          example: Sport
         productionYear:
           type: integer
           example: 2005
