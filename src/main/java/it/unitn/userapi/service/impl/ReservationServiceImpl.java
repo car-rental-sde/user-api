@@ -40,8 +40,6 @@ public class ReservationServiceImpl implements ReservationService {
     public Page<ReservationModel> searchReservations(Long carId,
                                                       LocalDate startDate,
                                                       LocalDate endDate,
-                                                      String startPlace,
-                                                      String endPlace,
                                                       ReservationsSortColumn sortBy,
                                                       SortDirection sortDirection,
                                                       Integer page,
@@ -54,8 +52,6 @@ public class ReservationServiceImpl implements ReservationService {
         if (endDate == null) {
             endDate = LocalDate.of(2500, 1, 1);
         }
-        startPlace = addSqlWildcards(startPlace);
-        endPlace = addSqlWildcards(endPlace);
 
         if (sortBy == null) {
             sortBy = ReservationsSortColumn.ID;
@@ -69,7 +65,7 @@ public class ReservationServiceImpl implements ReservationService {
                         .orElseThrow(() -> new RuntimeException("User not found")); // TODO: catch?
 
         HttpClientErrorsAwareResponse<ReservationsPaginationResponseModel> response = carRentalApiFacade.getReservationsByUserId(
-                userId, carId, startDate, endDate, startPlace, endPlace,
+                userId, carId, startDate, endDate,
                 mappers.toCarRentalApiReservationsSortColumn(sortBy),
                 mappers.toCarRentalApiSortDirection(sortDirection),
                 page, size);

@@ -29,8 +29,6 @@ public interface CarRentalApiFacade {
                                                                                                Long carId,
                                                                                                LocalDate startDate,
                                                                                                LocalDate endDate,
-                                                                                               String startPlace,
-                                                                                               String endPlace,
                                                                                                ReservationsSortColumn sortBy,
                                                                                                SortDirection sortDirection,
                                                                                                Integer page,

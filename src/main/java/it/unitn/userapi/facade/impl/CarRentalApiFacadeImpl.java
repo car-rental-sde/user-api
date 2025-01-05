@@ -60,7 +60,7 @@ public class CarRentalApiFacadeImpl implements CarRentalApiFacade {
     public HttpClientErrorsAwareResponse<CarModel> getCar(Long id) {
         HttpClientErrorsAwareResponse<CarModel> awareResponse =
                 new RestInvoker<CarModel>().invoke(() ->
-                        carsApi.getCarWithHttpInfo(id)
+                        carsApi.getCarWithHttpInfo(id, "EUR")
                 );
 
         return HttpClientErrorsAwareResponse.<CarModel>builder()
@@ -89,8 +89,6 @@ public class CarRentalApiFacadeImpl implements CarRentalApiFacade {
                                                                                                       Long carId,
                                                                                                       LocalDate startDate,
                                                                                                       LocalDate endDate,
-                                                                                                      String startPlace,
-                                                                                                      String endPlace,
                                                                                                       ReservationsSortColumn sortBy,
                                                                                                       SortDirection sortDirection,
                                                                                                       Integer page,
@@ -99,7 +97,7 @@ public class CarRentalApiFacadeImpl implements CarRentalApiFacade {
                 new RestInvoker<ReservationsPaginationResponseModel>().invoke(() ->
                         reservationsApi.searchReservationsWithHttpInfo(
                                 null,
-                                carId, startDate, endDate, startPlace, endPlace,
+                                carId, startDate, endDate,
                                 sortBy, sortDirection, page, size
                         )
                 );

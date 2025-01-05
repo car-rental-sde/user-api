@@ -61,6 +61,12 @@ paths:
         - Cars
       summary: Get car by id
       operationId: getCar
+      parameters:
+        - name: currency
+          in: query
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           description: OK
@@ -360,20 +366,6 @@ paths:
           schema:
             type: string
             format: date
-
-        - name: startPlace
-          in: query
-          required: false
-          schema:
-            type: string
-            example: "Warszawa Mokotów"
-
-        - name: endPlace
-          in: query
-          required: false
-          schema:
-            type: string
-            example: "Warszawa Bielany"
 
         - name: sortBy
           in: query
@@ -682,7 +674,7 @@ components:
         cars:
           type: array
           items:
-            $ref: '#/components/schemas/CarModel'
+            $ref: '#/components/schemas/CarOverviewModel'
 
     CarOverviewModel:
       type: object
@@ -716,6 +708,8 @@ components:
         dayPrice:
           type: integer
           format: int64
+        currency:
+          type: string
         color:
           type: string
 
@@ -885,23 +879,20 @@ components:
         beginDate:
           type: string
           format: date
-        beginPlace:
-          type: string
-          example: Mokotow
         beginPosition:
           type: string
           example: -77.0364,38.8951
         endDate:
           type: string
           format: date
-        endPlace:
-          type: string
-          example: Mokotow
         endPosition:
           type: string
           example: -77.0364,38.8951
         isMaintenance:
           type: boolean
+        cost:
+          type: integer
+          format: int64
         customer:
           $ref: '#/components/schemas/CustomerModel'
 
@@ -914,22 +905,18 @@ components:
         beginDate:
           type: string
           format: date
-        beginPlace:
-          type: string
-          example: Mokotow
         beginPosition:
           type: string
           example: -77.0364,38.8951
         endDate:
           type: string
           format: date
-        endPlace:
-          type: string
-          example: Mokotow
         endPosition:
           type: string
           example: -77.0364,38.8951
         isMaintenance:
+          type: boolean
+        calculateOnly:
           type: boolean
         customer:
           $ref: '#/components/schemas/CustomerRequestModel'

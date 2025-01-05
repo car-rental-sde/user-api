@@ -26,18 +26,16 @@ public class ReservationsApiImpl implements ReservationsApiDelegate {
     public ResponseEntity<ReservationsPaginationResponseModel> searchReservations(Long carId,
                                                                                   LocalDate startDate,
                                                                                   LocalDate endDate,
-                                                                                  String startPlace,
-                                                                                  String endPlace,
                                                                                   ReservationsSortColumn sortBy,
                                                                                   SortDirection sortDirection,
                                                                                   Integer page,
                                                                                   Integer size) {
 
-        log.debug("Searching reservations with carId: [{}], startDate: [{}], endDate: [{}], startPlace: [{}], " +
-                        "endPlace: [{}], sortBy: [{}], sortDirection: [{}], page: [{}], size: [{}]",
-                carId, startDate, endDate, startPlace, endPlace, sortBy, sortDirection, page, size);
+        log.debug("Searching reservations with carId: [{}], startDate: [{}], endDate: [{}], " +
+                        "sortBy: [{}], sortDirection: [{}], page: [{}], size: [{}]",
+                carId, startDate, endDate, sortBy, sortDirection, page, size);
 
-        Page<ReservationModel> reservations = reservationService.searchReservations(carId, startDate, endDate, startPlace, endPlace, sortBy, sortDirection, page, size);
+        Page<ReservationModel> reservations = reservationService.searchReservations(carId, startDate, endDate, sortBy, sortDirection, page, size);
 
         ReservationsPaginationResponseModel response = new ReservationsPaginationResponseModel();
         response.setReservations(reservations.getContent());
