@@ -27,6 +27,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     public Optional<AuthenticationResponseModel> authenticate(AuthenticationRequestModel request) {
+        Optional<UserEntity> userOptional = userRepository.findByUsername(request.getUsername());
+        if (userOptional.isEmpty()) {
+            log.warn("User not found: [{}]", request.getUsername());
+            return Optional.empty();
+        }
+
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getUsername(),
@@ -34,11 +40,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 )
         );
 
-        Optional<UserEntity> userOptional = userRepository.findByUsername(request.getUsername());
-        if (userOptional.isEmpty()) {
-            log.warn("User not found: [{}]", request.getUsername());
-            return Optional.empty();
-        }
         UserEntity user = userOptional.get();
         var jwtToken = jwtService.generateToken(user.getUsername());
 //        var refreshToken = jwtService.generateRefreshToken(user);
