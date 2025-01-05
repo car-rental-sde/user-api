@@ -522,6 +522,9 @@ components:
           example: -77.0364,38.8951
         isMaintenance:
           type: boolean
+        cost:
+          type: integer
+          format: int64
 #        customer:
 #          $ref: '#/components/schemas/CustomerModel'
 
