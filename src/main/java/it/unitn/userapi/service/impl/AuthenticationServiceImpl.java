@@ -1,5 +1,6 @@
 package it.unitn.userapi.service.impl;
 
+import it.unitn.userapi.entity.UserEntity;
 import it.unitn.userapi.openapi.model.AuthenticationRequestModel;
 import it.unitn.userapi.openapi.model.AuthenticationResponseModel;
 import it.unitn.userapi.repository.UserRepository;
@@ -8,12 +9,15 @@ import it.unitn.userapi.service.AuthenticationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
@@ -22,7 +26,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public AuthenticationResponseModel authenticate(AuthenticationRequestModel request) {
+    public Optional<AuthenticationResponseModel> authenticate(AuthenticationRequestModel request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getUsername(),
@@ -30,18 +34,22 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 )
         );
 
-        var user = userRepository.findByUsername(request.getUsername())
-                .orElseThrow();
+        Optional<UserEntity> userOptional = userRepository.findByUsername(request.getUsername());
+        if (userOptional.isEmpty()) {
+            log.warn("User not found: [{}]", request.getUsername());
+            return Optional.empty();
+        }
+        UserEntity user = userOptional.get();
         var jwtToken = jwtService.generateToken(user.getUsername());
 //        var refreshToken = jwtService.generateRefreshToken(user);
 
 //        revokeAllUserTokens(user); // TODO: What's this?
 //        saveUserToken(user, jwtToken); // TODO: What's this?
 
-        return AuthenticationResponseModel.builder()
+        return Optional.ofNullable(AuthenticationResponseModel.builder()
                 .accessToken(jwtToken)
 //                .refreshToken(refreshToken)
-                .build();
+                .build());
     }
 
 //    private void saveUserToken(UserEntity user, String jwtToken) {

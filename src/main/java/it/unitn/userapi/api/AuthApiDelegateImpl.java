@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -20,7 +22,10 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
     public ResponseEntity<AuthenticationResponseModel> login(AuthenticationRequestModel authenticationRequestModel) {
         log.debug("Trying to authenticate user...");
         log.trace("Authenticating user: [{}]", authenticationRequestModel);
-        return ResponseEntity.ok(authenticationService.authenticate(authenticationRequestModel));
+
+        Optional<AuthenticationResponseModel> authenticationOptional = authenticationService.authenticate(authenticationRequestModel);
+
+        return authenticationOptional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
     @Override
