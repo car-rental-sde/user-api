@@ -55,6 +55,7 @@ paths:
           required: false
           schema:
             type: string
+            example: EUR
       responses:
         '200':
           description: OK
@@ -644,19 +645,24 @@ components:
       properties:
         username:
           type: string
+          example: user
         password:
           type: string
+          example: password
 
     CarsPaginationResponseModel:
       type: object
       properties:
         pageNumber:
           type: integer
+          example: 1
         pageSize:
           type: integer
+          example: 20
         totalRecords:
           type: integer
           format: int64
+          example: 1
         cars:
           type: array
           items:
@@ -668,13 +674,16 @@ components:
         id:
           type: integer
           format: int64
+          example: 1
         model:
           $ref: '#/components/schemas/CarModelModel'
         dayPrice:
           type: integer
           format: int64
+          example: 30
         color:
           type: string
+          example: red
 
     CarModel:
       type: object
@@ -682,6 +691,7 @@ components:
         id:
           type: integer
           format: int64
+          example: 1
         model:
           $ref: '#/components/schemas/CarModelModel'
         mileage:
@@ -694,10 +704,13 @@ components:
         dayPrice:
           type: integer
           format: int64
+          example: 30
         currency:
           type: string
+          example: EUR
         color:
           type: string
+          example: red
 
     CarRequestModel:
       type: object
@@ -714,11 +727,14 @@ components:
           items:
             type: integer
             format: int64
+            example: [1, 2, 3]
         dayPrice:
           type: integer
           format: int64
+          example: 60
         color:
           type: string
+          example: black
 
     CarModelModel:
       type: object
@@ -726,6 +742,7 @@ components:
         id:
           type: integer
           format: int64
+          example: 1
         brand:
           $ref: '#/components/schemas/BrandModel'
         name:
@@ -740,6 +757,7 @@ components:
           $ref: '#/components/schemas/FuelTypeModel'
         isGearboxAutomatic:
           type: boolean
+          example: true
         numberOfDoors:
           type: integer
           example: 4
@@ -763,6 +781,7 @@ components:
         brandId:
           type: integer
           format: int64
+          example: 1
         name:
           type: string
           example: Mustang
@@ -772,11 +791,14 @@ components:
         carTypeId:
           type: integer
           format: int64
+          example: 1
         fuelTypeId:
           type: integer
           format: int64
+          example: 1
         isGearboxAutomatic:
           type: boolean
+          example: true
         numberOfDoors:
           type: integer
           example: 4
@@ -800,14 +822,13 @@ components:
         id:
           type: integer
           format: int64
+          example: 1
         name:
           type: string
           example: Ford
         country:
           type: string
           example: USA
-        logoUrl:
-          type: string
 
     CarTypeModel:
       type: object
@@ -815,6 +836,7 @@ components:
         id:
           type: integer
           format: int64
+          example: 1
         name:
           type: string
           example: Coupe
@@ -825,6 +847,7 @@ components:
         id:
           type: integer
           format: int64
+          example: 1
         name:
           type: string
           example: Diesel
@@ -835,6 +858,7 @@ components:
         id:
           type: integer
           format: int64
+          example: 1
         name:
           type: string
           example: Air conditioning
@@ -844,11 +868,14 @@ components:
       properties:
         pageNumber:
           type: integer
+          example: 1
         pageSize:
           type: integer
+          example: 20
         totalRecords:
           type: integer
           format: int64
+          example: 1
         reservations:
           type: array
           items:
@@ -860,25 +887,30 @@ components:
         id:
           type: integer
           format: int64
+          example: 1
         car:
           $ref: '#/components/schemas/CarModel'
         beginDate:
           type: string
           format: date
+          example: 2025-01-01
         beginPosition:
           type: string
-          example: -77.0364,38.8951
+          example: 46.0670,11.1504
         endDate:
           type: string
           format: date
+          example: 2025-01-02
         endPosition:
           type: string
-          example: -77.0364,38.8951
+          example: 46.0625,11.1156
         isMaintenance:
           type: boolean
+          example: false
         cost:
           type: integer
           format: int64
+          example: 100
         customer:
           $ref: '#/components/schemas/CustomerModel'
 
@@ -888,22 +920,27 @@ components:
         carId:
           type: integer
           format: int64
+          example: 1
         beginDate:
           type: string
           format: date
+          example: 2025-01-01
         beginPosition:
           type: string
-          example: -77.0364,38.8951
+          example: 46.0670,11.1504
         endDate:
           type: string
           format: date
+          example: 2025-01-02
         endPosition:
           type: string
-          example: -77.0364,38.8951
+          example: 46.0625,11.1156
         isMaintenance:
           type: boolean
+          example: false
         calculateOnly:
           type: boolean
+          example: true
         customer:
           $ref: '#/components/schemas/CustomerRequestModel'
 
@@ -912,11 +949,14 @@ components:
       properties:
         pageNumber:
           type: integer
+          example: 1
         pageSize:
           type: integer
+          example: 20
         totalRecords:
           type: integer
           format: int64
+          example: 1
         users:
           type: array
           items:
@@ -928,13 +968,14 @@ components:
         id:
           type: integer
           format: int64
+          example: 1
         username:
           type: string
-          example: theUser
+          example: user
         email:
           type: string
           format: email
-          example: email@email.email
+          example: example@example.com
         name:
           type: string
           example: John
@@ -949,19 +990,20 @@ components:
       properties:
         username:
           type: string
-          example: theUser
+          example: user
         password:
           type: string
+          example: password
         email:
           type: string
           format: email
-          example: email@email.email
+          example: example@example.com
         name:
           type: string
-          example: John
+          example: User1
         surname:
           type: string
-          example: Doe
+          example: User1s
         userRole:
           $ref: '#/components/schemas/UserRoleModel'
 
@@ -971,12 +1013,16 @@ components:
         id:
           type: integer
           format: int64
+          example: 1
         externalId:
           type: integer
+          example: 1
         name:
           type: string
+          example: John
         surname:
           type: string
+          example: Doe
 
     CustomerRequestModel:
       type: object
@@ -984,10 +1030,13 @@ components:
         externalId:
           type: integer
           format: int64
+          example: 1
         name:
           type: string
+          example: John
         surname:
           type: string
+          example: Doe
 
     UserRoleModel:
       type: string
