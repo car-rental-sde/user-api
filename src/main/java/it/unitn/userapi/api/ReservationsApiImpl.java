@@ -44,10 +44,10 @@ public class ReservationsApiImpl implements ReservationsApiDelegate {
     }
 
     @Override
-    public ResponseEntity<ReservationModel> getReservation(Long id) {
+    public ResponseEntity<ReservationModel> getReservation(Long id, String currency) {
         log.debug("Getting reservation with id: [{}]", id);
 
-        Optional<ReservationModel> optionalReservation = reservationService.getReservation(id);
+        Optional<ReservationModel> optionalReservation = reservationService.getReservation(id, currency);
 
         return optionalReservation.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());

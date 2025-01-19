@@ -56,24 +56,10 @@ public class CarRentalApiFacadeImpl implements CarRentalApiFacade {
     }
 
     @Override
-    public HttpClientErrorsAwareResponse<CarModel> getCar(Long id) {
-        HttpClientErrorsAwareResponse<CarModel> awareResponse =
-                new RestInvoker<CarModel>().invoke(() ->
-                        carsApi.getCarWithHttpInfo(id, "EUR")
-                );
-
-        return HttpClientErrorsAwareResponse.<CarModel>builder()
-                .statusCode(awareResponse.getStatusCode())
-                .body(awareResponse.getBody())
-                .error(awareResponse.getError())
-                .build();
-    }
-
-    @Override
-    public HttpClientErrorsAwareResponse<ReservationModel> getReservation(Long id) {
+    public HttpClientErrorsAwareResponse<ReservationModel> getReservation(Long id, String currency) {
         HttpClientErrorsAwareResponse<ReservationModel> awareResponse =
                 new RestInvoker<ReservationModel>().invoke(() ->
-                        reservationsApi.getReservationWithHttpInfo(id)
+                        reservationsApi.getReservationWithHttpInfo(id, currency)
                 );
 
         return HttpClientErrorsAwareResponse.<ReservationModel>builder()

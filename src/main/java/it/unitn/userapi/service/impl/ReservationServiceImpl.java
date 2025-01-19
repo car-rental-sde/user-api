@@ -111,9 +111,9 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public Optional<ReservationModel> getReservation(Long id) {
+    public Optional<ReservationModel> getReservation(Long id, String currency) {
         HttpClientErrorsAwareResponse<it.unitn.userapi.carrentalapi.model.ReservationModel> response =
-                carRentalApiFacade.getReservation(id);
+                carRentalApiFacade.getReservation(id, currency);
 
         if (response.isSuccess()) {
             return Optional.of(mappers.toReservationModel(response.getBody()));

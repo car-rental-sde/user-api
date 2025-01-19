@@ -23,8 +23,7 @@ public interface CarRentalApiFacade {
                                                                           SortDirection sortDirection,
                                                                           Integer page,
                                                                           Integer size);
-    HttpClientErrorsAwareResponse<CarModel> getCar(Long id);
-    HttpClientErrorsAwareResponse<ReservationModel> getReservation(Long id);
+    HttpClientErrorsAwareResponse<ReservationModel> getReservation(Long id, String currency);
     HttpClientErrorsAwareResponse<ReservationsPaginationResponseModel> getReservationsByUserId(Long customerExternalId,
                                                                                                Long carId,
                                                                                                LocalDate startDate,

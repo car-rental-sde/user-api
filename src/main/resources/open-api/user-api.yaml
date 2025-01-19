@@ -47,6 +47,13 @@ paths:
         - Reservations
       summary: Get reservation by id
       operationId: getReservation
+      parameters:
+        - name: currency
+          in: query
+          required: false
+          schema:
+            type: string
+            example: EUR
 
       responses:
         '200':
@@ -508,6 +515,9 @@ components:
           example: -77.0364,38.8951
         isMaintenance:
           type: boolean
+        currency:
+          type: string
+          example: EUR
         cost:
           type: integer
           format: int64
@@ -534,6 +544,9 @@ components:
           example: -77.0364,38.8951
         isMaintenance:
           type: boolean
+        currency:
+          type: string
+          example: EUR
         calculateOnly:
           type: boolean
 #        customer:

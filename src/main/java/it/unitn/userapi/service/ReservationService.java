@@ -18,7 +18,7 @@ public interface ReservationService {
                                                Integer page,
                                                Integer size);
     Optional<ReservationModel> addReservation(ReservationRequestModel putReservationDto);
-    Optional<ReservationModel> getReservation(Long id);
+    Optional<ReservationModel> getReservation(Long id, String currency);
     void deleteReservation(Long id);
     Optional<ReservationModel> updateReservation(Long id, ReservationRequestModel putReservationDto);
 }
