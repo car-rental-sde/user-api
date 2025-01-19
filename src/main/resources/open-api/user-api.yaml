@@ -602,7 +602,7 @@ components:
       enum:
         - USER
         - ADMIN
-        - API_CLIENT # TODO: Can I do it in smarter way? Like have a specific value in db for reservation made by external api? Google how to do it better
+        - API_CLIENT
 
     CarsSortColumn:
       type: string

@@ -52,19 +52,9 @@ public class CarRentalApiConfig {
                                                MediaType contentType,
                                                String[] authNames,
                                                ParameterizedTypeReference<T> returnType) throws RestClientException {
-            String username = appConfig.getCarRentalApiUsername();
-            String password = appConfig.getCarRentalApiPassword();
-//            headerParams.add("Authorization", "Basic " + encodeCredentials(username, password));
 
-            // Generate a jwt token
             headerParams.add("Authorization", "Bearer " + jwtService.generateToken(appConfig.getCarRentalApiUsername()));
             return super.invokeAPI(path, method, pathParams, queryParams, body, headerParams, cookieParams, formParams, accept, contentType, authNames, returnType);
         }
     }
-
-//    private String encodeCredentials(String username, String password) {
-//        String credentials = username + ":" + password;
-//        byte[] credentialsBytes = credentials.getBytes(StandardCharsets.UTF_8);
-//        return Base64.getEncoder().encodeToString(credentialsBytes);
-//    }
 }

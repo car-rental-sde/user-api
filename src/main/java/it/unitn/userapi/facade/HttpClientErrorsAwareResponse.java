@@ -4,13 +4,11 @@ import lombok.Builder;
 import lombok.Getter;
 import org.springframework.http.HttpStatusCode;
 
+@Getter
 @Builder
 public class HttpClientErrorsAwareResponse<T> {
-    @Getter
     private HttpStatusCode statusCode;
-    @Getter
     private T body;
-    @Getter
     private String error;
 
     public boolean isSuccess() {

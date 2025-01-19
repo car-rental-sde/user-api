@@ -36,6 +36,4 @@ public interface CarRentalApiFacade {
     HttpClientErrorsAwareResponse<ReservationModel> makeReservation(ReservationRequestModel reservationRequestModel);
     HttpClientErrorsAwareResponse<ReservationModel> editReservation(Long id, ReservationRequestModel reservationRequestModel);
     HttpClientErrorsAwareResponse<Void> deleteReservation(Long id);
-
-    // get all internal - not sure
 }

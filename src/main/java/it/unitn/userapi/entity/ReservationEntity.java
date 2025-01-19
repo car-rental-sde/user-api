@@ -39,7 +39,7 @@ public class ReservationEntity
 	@Column(nullable = false)
 	private Boolean isMaintenance;
 
-	@Column(nullable = true)
+	@Column()
 	private String details;
 
 	@ManyToOne

@@ -39,12 +39,12 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public Page<ReservationModel> searchReservations(Long carId,
-                                                      LocalDate startDate,
-                                                      LocalDate endDate,
-                                                      ReservationsSortColumn sortBy,
-                                                      SortDirection sortDirection,
-                                                      Integer page,
-                                                      Integer size) {
+                                                     LocalDate startDate,
+                                                     LocalDate endDate,
+                                                     ReservationsSortColumn sortBy,
+                                                     SortDirection sortDirection,
+                                                     Integer page,
+                                                     Integer size) {
 
 
         if (startDate == null) {
@@ -63,7 +63,7 @@ public class ReservationServiceImpl implements ReservationService {
 
         String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         Long userId = userRepository.findByUsername(username).map(UserEntity::getId)
-                        .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
         HttpClientErrorsAwareResponse<ReservationsPaginationResponseModel> response = carRentalApiFacade.getReservationsByUserId(
                 userId, carId, startDate, endDate,
@@ -72,16 +72,20 @@ public class ReservationServiceImpl implements ReservationService {
                 page, size);
 
         if (response.isSuccess()) {
-            List<ReservationModel> reservations = response.getBody().getReservations().stream()
+            List<ReservationModel> reservations = Optional.ofNullable(response.getBody().getReservations())
+                    .orElse(List.of())
+                    .stream()
                     .map(mappers::toReservationModel)
                     .toList();
 
-            // Return a Page object constructed with retrieved data
             return new PageImpl<>(
                     reservations,
-                    PageRequest.of(response.getBody().getPageNumber(), response.getBody().getPageSize(),
-                            Sort.by(sortDirection == SortDirection.ASC ? Sort.Direction.ASC : Sort.Direction.DESC, sortBy.name())),
-                    response.getBody().getTotalRecords()
+                    PageRequest.of(
+                            Optional.ofNullable(response.getBody()).map(ReservationsPaginationResponseModel::getPageNumber).orElse(0),
+                            Optional.ofNullable(response.getBody()).map(ReservationsPaginationResponseModel::getPageSize).orElse(size),
+                            Sort.by(sortDirection == SortDirection.ASC ? Sort.Direction.ASC : Sort.Direction.DESC, sortBy.name())
+                    ),
+                    Optional.ofNullable(response.getBody()).map(ReservationsPaginationResponseModel::getTotalRecords).orElse(0L)
             );
         } else {
             return Page.empty();
@@ -149,8 +153,8 @@ public class ReservationServiceImpl implements ReservationService {
 
     private CustomerRequestModel toCustomerModel(UserEntity user) {
         return new CustomerRequestModel()
-            .externalId(user.getId())
-            .name(user.getName())
-            .surname(user.getSurname());
+                .externalId(user.getId())
+                .name(user.getName())
+                .surname(user.getSurname());
     }
 }

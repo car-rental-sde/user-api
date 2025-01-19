@@ -1,7 +1,5 @@
 package it.unitn.userapi.api;
 
-import it.unitn.userapi.entity.ReservationEntity;
-import it.unitn.userapi.mapper.Mappers;
 import it.unitn.userapi.openapi.api.ReservationsApiDelegate;
 import it.unitn.userapi.openapi.model.*;
 import it.unitn.userapi.service.ReservationService;
@@ -20,7 +18,6 @@ import java.util.Optional;
 public class ReservationsApiImpl implements ReservationsApiDelegate {
 
     private final ReservationService reservationService;
-    private final Mappers mappers;
 
     @Override
     public ResponseEntity<ReservationsPaginationResponseModel> searchReservations(Long carId,
@@ -59,8 +56,6 @@ public class ReservationsApiImpl implements ReservationsApiDelegate {
     @Override
     public ResponseEntity<ReservationModel> addReservation(ReservationRequestModel reservationRequest) {
         log.debug("Adding reservation with request: [{}]", reservationRequest);
-
-        // TODO: If null then return specific code
 
         Optional<ReservationModel> reservationOptional = reservationService.addReservation(reservationRequest);
         return reservationOptional.map(ResponseEntity::ok)
