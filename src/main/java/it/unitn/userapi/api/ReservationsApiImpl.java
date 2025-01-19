@@ -38,7 +38,7 @@ public class ReservationsApiImpl implements ReservationsApiDelegate {
         response.setReservations(reservations.getContent());
         response.setPageNumber(reservations.getNumber());
         response.setPageSize(reservations.getSize());
-        response.setTotalRecords(reservations.getTotalElements());
+        response.setTotalRecords((long) reservations.getContent().size());
 
         return ResponseEntity.ok(response);
     }

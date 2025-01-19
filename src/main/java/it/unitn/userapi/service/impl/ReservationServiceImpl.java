@@ -85,7 +85,7 @@ public class ReservationServiceImpl implements ReservationService {
                             Optional.ofNullable(response.getBody()).map(ReservationsPaginationResponseModel::getPageSize).orElse(size),
                             Sort.by(sortDirection == SortDirection.ASC ? Sort.Direction.ASC : Sort.Direction.DESC, sortBy.name())
                     ),
-                    Optional.ofNullable(response.getBody()).map(ReservationsPaginationResponseModel::getTotalRecords).orElse(0L)
+                    reservations.size()
             );
         } else {
             return Page.empty();

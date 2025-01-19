@@ -1,6 +1,5 @@
 package it.unitn.userapi.mapper;
 
-import it.unitn.userapi.entity.ReservationEntity;
 import it.unitn.userapi.entity.UserEntity;
 import it.unitn.userapi.entity.UserRole;
 import it.unitn.userapi.openapi.model.*;
@@ -27,8 +26,6 @@ public interface Mappers {
     }
 
     it.unitn.userapi.carrentalapi.model.ReservationRequestModel toCarRentalApiReservationRequestModel(ReservationRequestModel entity);
-    ReservationEntity toReservationEntity(it.unitn.userapi.carrentalapi.model.ReservationModel entity);
-    ReservationModel toReservationModel(ReservationEntity entity);
     ReservationModel toReservationModel(it.unitn.userapi.carrentalapi.model.ReservationModel entity);
     it.unitn.userapi.carrentalapi.model.ReservationsSortColumn toCarRentalApiReservationsSortColumn(ReservationsSortColumn entity);
     it.unitn.userapi.carrentalapi.model.SortDirection toCarRentalApiSortDirection(SortDirection entity);
