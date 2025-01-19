@@ -1,5 +1,6 @@
 package it.unitn.userapi.service.impl;
 
+import it.unitn.userapi.api.error.AlternativeHttpStatusCodeResponse;
 import it.unitn.userapi.carrentalapi.model.CustomerRequestModel;
 import it.unitn.userapi.carrentalapi.model.ReservationsPaginationResponseModel;
 import it.unitn.userapi.entity.UserEntity;
@@ -14,11 +15,11 @@ import it.unitn.userapi.repository.UserRepository;
 import it.unitn.userapi.service.ReservationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
@@ -62,7 +63,7 @@ public class ReservationServiceImpl implements ReservationService {
 
         String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         Long userId = userRepository.findByUsername(username).map(UserEntity::getId)
-                        .orElseThrow(() -> new RuntimeException("User not found")); // TODO: catch?
+                        .orElseThrow(() -> new RuntimeException("User not found"));
 
         HttpClientErrorsAwareResponse<ReservationsPaginationResponseModel> response = carRentalApiFacade.getReservationsByUserId(
                 userId, carId, startDate, endDate,
@@ -123,7 +124,7 @@ public class ReservationServiceImpl implements ReservationService {
 
         if (!response.isSuccess()) {
             log.error("Failed to delete reservation with id: [{}]", id);
-            // TODO: throw exception?
+            throw new AlternativeHttpStatusCodeResponse(HttpStatus.I_AM_A_TEAPOT, null);
         }
     }
 
@@ -144,10 +145,6 @@ public class ReservationServiceImpl implements ReservationService {
 
         return Optional.empty();
 
-    }
-
-    private String addSqlWildcards(String arg) {
-        return StringUtils.defaultIfBlank(arg, "") + "%";
     }
 
     private CustomerRequestModel toCustomerModel(UserEntity user) {

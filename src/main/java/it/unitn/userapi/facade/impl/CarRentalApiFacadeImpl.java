@@ -20,7 +20,6 @@ public class CarRentalApiFacadeImpl implements CarRentalApiFacade {
     private final CarsApi carsApi;
     private final ReservationsApi reservationsApi;
 
-    // TODO: Make it simple
     @Override
     public HttpClientErrorsAwareResponse<CarsPaginationResponseModel> searchCars(String brand,
                                                                                  String model,
