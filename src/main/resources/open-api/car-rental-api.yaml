@@ -34,18 +34,6 @@ paths:
         '400':
           description: Bad request
 
-  /auth/refresh:
-    post:
-      tags:
-        - Authentication
-      summary: Refresh token
-      operationId: refresh
-      responses:
-        '200':
-          description: OK
-        '400':
-          description: Bad request
-
 
   /cars/{id}:
     parameters:
@@ -649,8 +637,6 @@ components:
       type: object
       properties:
         accessToken:
-          type: string
-        refreshToken:
           type: string
 
     AuthenticationRequestModel:

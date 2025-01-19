@@ -27,11 +27,4 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
 
         return authenticationOptional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
     }
-
-    @Override
-    public ResponseEntity<Void> refresh() {
-        log.debug("Trying to refresh token...");
-//        authenticationService.refreshToken(request, response);
-        return ResponseEntity.ok().build();
-    }
 }

@@ -21,6 +21,6 @@ public class JwtUserDetailsService {
                         .password(user.getPassword())
                         .roles("USER")
                         .build())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found")); // TODO: Just log the error and return null?
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 }
