@@ -95,7 +95,7 @@ public class CarRentalApiFacadeImpl implements CarRentalApiFacade {
         HttpClientErrorsAwareResponse<ReservationsPaginationResponseModel> awareResponse =
                 new RestInvoker<ReservationsPaginationResponseModel>().invoke(() ->
                         reservationsApi.searchReservationsWithHttpInfo(
-                                null,
+                                customerExternalId,
                                 carId, startDate, endDate,
                                 sortBy, sortDirection, page, size
                         )
